@@ -112,8 +112,8 @@ UPX = upx
 
 # 		-DPERSOPORT -DCYGTERMPORT -DIMAGEPORT -DRECONNECTPORT -DHYPERLINKPORT -DZMODEMPORT -DSTARTBUTTON -DLAUNCHERPORT -DSAVEDUMPPORT -DKEYMAPPINGPORT -DWINCRYPTPORT -DTUTTYPORT -DPORTKNOCKINGPORT -DPUTTYXPORT -DWTSPORT -DPRINTCLIPPORT -DRUTTYPORT -DADBPORT \
 
-# Anciens flags: 
-#   -DIVPORT 
+# Anciens flags:
+#   -DIVPORT
 #   -DPERFPORT (ne marche pas !!!)
 #   -DTRUECOLORPORT (ne marche pas)
 
@@ -123,8 +123,9 @@ FDJFLAG = FDJ1
 # Ajouter  -DNO_PASSWORD \ pour compiler une version sans possibilité de sauvegarder le mot de passe
 
 
-CFLAGS = -Wall -O2 -D_WINDOWS -DWIN32S_COMPAT -D$(FDJFLAG) \
-		-DAUTO_WINSOCK \
+CFLAGS = -Wall -O2 -D_WINDOWS -DWIN32S_COMPAT -D$(FDJFLAG) -B`pwd`/tmp \
+		-DWINSOCK_TWO \
+		-D_DDK_DRIVER_ \
 		-DUSE_CAPI -DCOVERITY \
  		-DPERSOPORT \
 		-DCYGTERMPORT \
@@ -136,7 +137,6 @@ CFLAGS = -Wall -O2 -D_WINDOWS -DWIN32S_COMPAT -D$(FDJFLAG) \
 		-DLAUNCHERPORT \
 		-DSAVEDUMPPORT \
 		-DKEYMAPPINGPORT \
-		-DWINCRYPTPORT \
 		-DTUTTYPORT \
 		-DPORTKNOCKINGPORT \
 		-DPUTTYXPORT \
@@ -149,7 +149,8 @@ CFLAGS = -Wall -O2 -D_WINDOWS -DWIN32S_COMPAT -D$(FDJFLAG) \
 		-I../charset/ -I../windows/ -I../unix/ -I../mac/ \
 		-I../macosx \
 		-I../../base64 -I../../bcrypt -I../../md5 -I../../regex -I../../url -I../../wincrypt -I../../rutty
-CFLAGS_PLINK = -Wall -O2 -D_WINDOWS -DWIN32S_COMPAT \
+CFLAGS_PLINK = -Wall -O2 -D_WINDOWS -DWIN32S_COMPAT -B`pwd`/tmp \
+		-D_DDK_DRIVER_ \
 		-DPERSOPORT -DPUTTYCYG -DRECONNECTPORT -DNO_RUTTYPORT \
 		-D_NO_OLDNAMES -DNO_MULTIMON -DNO_HTMLHELP -I../. \
 		-I../charset -I../windows -I../unix -I../mac -I.\
@@ -317,7 +318,7 @@ psftp.exe: aqsync.o be_misc.o be_ssh.o callback.o cmdline.o conf.o cproxy.o \
 		-ladvapi32 -lcomdlg32 -lgdi32 -limm32 \
 		-lole32 -lshell32 -luser32 \
 		-lwinmm -lwinspool -lcrypt32 -lwsock32
-		
+
 putty.exe: 	aqsync.o be_all_s.o be_misc.o callback.o cmdline.o conf.o \
 		config.o cproxy.o dialog.o errsock.o ldisc.o ldiscucs.o \
 		logging.o minibidi.o misc.o miscucs.o pgssapi.o pinger.o \
@@ -386,7 +387,7 @@ puttygen.exe: conf.o import.o misc.o notiming.o puttygen.res.o sshaes.o \
 		-ladvapi32 -lcomctl32 -lcomdlg32 -lgdi32 -limm32 \
 		-lole32 -lshell32 -luser32 -lwinmm -lwinspool \
 		-lcrypt32
-		
+
 puttytel.exe: be_nos_s.o callback.o cmdline.o conf.o config.o dialog.o \
 		errsock.o ldisc.o ldiscucs.o logging.o minibidi.o misc.o \
 		miscucs.o nocproxy.o nogss.o pinger.o proxy.o puttytel.res.o \
@@ -410,7 +411,7 @@ puttytel.exe: be_nos_s.o callback.o cmdline.o conf.o config.o dialog.o \
 
 adb.o: ../putty.h ../../adb/adb.c
 	$(CC) $(COMPAT) $(CFLAGS) $(XFLAGS) -c ../../adb/adb.c -I../../adb -I../../
-	
+
 testbn.exe: conf.o misc.o sshbn.o testbn.o tree234.o version.o winmisc.o
 	$(CC) $(LDFLAGS) -o $@ -Wl,-Map,testbn.map conf.o misc.o sshbn.o \
 		testbn.o tree234.o version.o winmisc.o -ladvapi32 -lcomctl32 \
@@ -815,7 +816,7 @@ sshbn.o: ../sshbn.c ../misc.h ../sshbn.h ../ssh.h ../puttymem.h ../tree234.h \
 sshccp.o: ../sshccp.c ../ssh.h ../sshbn.h ../puttymem.h ../tree234.h \
 		../network.h ../int64.h ../misc.h
 	$(CC) $(COMPAT) $(CFLAGS) $(XFLAGS) -c ../sshccp.c
-	
+
 sshcrc.o: ../sshcrc.c ../ssh.h ../puttymem.h ../tree234.h ../network.h \
 		../int64.h ../misc.h
 	$(CC) $(COMPAT) $(CFLAGS) $(XFLAGS) -c ../sshcrc.c
@@ -939,7 +940,7 @@ tree234.o: ../tree234.c ../puttymem.h ../tree234.h
 
 urlhack.o: ../../url/urlhack.c ../../url/urlhack.h \
 		../puttymem.h
-	$(CC) $(COMPAT) $(CFLAGS) $(XFLAGS) -c ../../url/urlhack.c -DEXTERN_REGEXLIB 
+	$(CC) $(COMPAT) $(CFLAGS) $(XFLAGS) -c ../../url/urlhack.c -DEXTERN_REGEXLIB
 
 urlhack_nohyperlink.o: ../../url/urlhack.c ../../url/urlhack.h \
 		../puttymem.h

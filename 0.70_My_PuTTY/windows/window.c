@@ -303,10 +303,6 @@ int WINAPI Agent_WinMain(HINSTANCE inst, HINSTANCE prev, LPSTR cmdline, int show
 #endif
 
 #ifdef WTSPORT
-typedef enum _WTS_VIRTUAL_CLASS { 
-  WTSVirtualClientData,
-  WTSVirtualFileHandle
-} WTS_VIRTUAL_CLASS; 		// WTS_VIRTUAL_CLASS n'est pas défini dans le fichier wtsapi32.h !!!
 #include <wtsapi32.h>
 #endif
 #if (defined IMAGEPORT) && (!defined FDJ)
